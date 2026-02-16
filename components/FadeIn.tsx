@@ -2,20 +2,24 @@
 
 import { ReactNode } from "react";
 
-type FadeInProps = {
+interface FadeInProps {
   children: ReactNode;
   delay?: number;
-  className?: string;   // 👈 PRIDAJ TOTO
-};
+  className?: string;
+}
 
-export default function FadeIn({ children, delay = 0, className = "" }: FadeInProps) {
+export default function FadeIn({
+  children,
+  delay = 0,
+  className = "",
+}: FadeInProps) {
   return (
     <div
       className={className}
       style={{
         opacity: 0,
         transform: "translateY(20px)",
-        animation: `fadeInUp 0.6s ease forwards`,
+        animation: "fadeInUp 0.6s ease forwards",
         animationDelay: `${delay}s`,
       }}
     >

@@ -64,9 +64,9 @@ export default function KontaktPage() {
               </h2>
 
               <div className="space-y-2 text-white/80">
-                <div>Pon – Pia: 9:00 – 17:00</div>
-                <div>So: podľa dohody</div>
-                <div>Ne: zatvorené</div>
+                <div>Pon – Pia: 8:00 – 17:00</div>
+                <div>So: 8:30 - 12:30</div>
+                <div>Ne: <span className="text-red-600">ZATVORENÉ</span></div>
               </div>
             </div>
           </FadeIn>

@@ -17,7 +17,7 @@ export default function HomePage() {
       <section
         className="relative min-h-[85vh] md:min-h-screen flex items-center justify-center text-center px-6 pt-24 md:pt-0"
         style={{
-          backgroundImage: "url('/hero_bg5.png')",
+          backgroundImage: "url('/hero_bgFF.png')",
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",

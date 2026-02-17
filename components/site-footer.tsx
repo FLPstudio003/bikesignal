@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Footer() {
   return (
@@ -7,14 +8,20 @@ export default function Footer() {
       {/* 🔥 HORNÁ FAREBNÁ HRANA */}
       <div className="h-[3px] w-full bg-gradient-to-r from-yellow-400 via-orange-500 to-red-600" />
 
-     
       {/* ================= HLAVNÁ FOOTER ČASŤ ================= */}
       <div className="max-w-6xl mx-auto px-6 py-20 grid md:grid-cols-4 gap-14">
 
         {/* LOGO + TEXT */}
         <div className="space-y-5">
-          <div className="text-xl text-[#008000] font-bold tracking-wide">
-            BIKE SIGNAL
+
+          {/* 🔥 LOGO miesto textu */}
+          <div className="relative w-44 h-12">
+            <Image
+              src="/footer_logo-01.png"
+              alt="Bike Signal logo"
+              fill
+              className="object-contain"
+            />
           </div>
 
           <p className="text-white/60 text-sm leading-relaxed">
@@ -121,8 +128,6 @@ export default function Footer() {
 
         </div>
       </div>
-
-      
 
     </footer>
   );

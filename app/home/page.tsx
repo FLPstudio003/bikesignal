@@ -17,7 +17,7 @@ export default function HomePage() {
       <section
         className="relative min-h-[85vh] md:min-h-screen flex items-center justify-center text-center px-6 pt-24 md:pt-0"
         style={{
-          backgroundImage: "url('/hero_bg4.png')",
+          backgroundImage: "url('/hero_bg5.png')",
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
@@ -67,7 +67,7 @@ export default function HomePage() {
       </section>
 
       {/* ================= PREČO MY ================= */}
-<section className="pt-0 pb-24 px-6 bg-black text-center relative overflow-hidden">
+<section className="pt-0 pb-24 px-6 bg-transparent text-center relative overflow-hidden">
   <div className="max-w-6xl mx-auto">
     <FadeIn>
       <h2 className="text-3xl md:text-4xl font-bold mb-12">
@@ -145,7 +145,7 @@ export default function HomePage() {
 
 
       {/* ================= BIKE SIGNAL SYSTÉM (STRAVA + BENEFITY + CTA) ================= */}
-      <section className="py-24 px-6 bg-black">
+      <section className="py-24 px-6 bg-transparent">
         <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-14 items-center">
           <FadeIn>
             <div className="space-y-6">
@@ -236,7 +236,7 @@ export default function HomePage() {
       <StatsCounters />
       
       {/* ================= DOVOZ / ODVOZ (NOVÁ SEKČIA - KONKURENČNÝ BENEFIT) ================= */}
-      <section className="py-24 px-6 bg-black">
+      <section className="py-24 px-6 bg-transparent">
         <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-14 items-center">
           <FadeIn>
             <div className="space-y-6">
@@ -323,7 +323,7 @@ export default function HomePage() {
       <LoyaltyProgramSection /> 
 
       {/* ================= SLUŽBY (OBRÁZKY servis1.png + servis2.png) ================= */}
-      <section className="py-24 px-6 bg-black">
+      <section className="py-24 px-6 bg-transparent">
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-14">
             <FadeIn>
@@ -414,7 +414,7 @@ export default function HomePage() {
       </section>
 
       {/* ================= AKO TO FUNGUJE ================= */}
-      <section className="py-24 px-6 bg-black text-center">
+      <section className="py-24 px-6 bg-transparent text-center">
         <div className="max-w-6xl mx-auto">
           <FadeIn>
             <h2 className="text-3xl md:text-4xl font-bold mb-12">
@@ -455,7 +455,7 @@ export default function HomePage() {
       </section>
 
       {/* ================= CTA ================= */}
-      <section className="py-24 px-6 bg-black text-center">
+      <section className="py-24 px-6 bg-transparent text-center">
         <div className="max-w-3xl mx-auto space-y-8">
           <FadeIn>
             <h2 className="text-3xl md:text-4xl font-bold">

@@ -2,38 +2,12 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="bg-black text-white border-t border-white/10">
+    <footer className="bg-black text-white">
 
-      {/* ================= HORNÁ CTA ČASŤ ================= */}
-      <div className="border-b border-white/10">
-        <div className="max-w-6xl mx-auto px-6 py-16 text-center space-y-6">
-          <h3 className="text-2xl md:text-3xl font-bold">
-            Servis bez chaosu. <span className="text-[#00a000]">Kontrola nad kilometrami.</span>
-          </h3>
+      {/* 🔥 HORNÁ FAREBNÁ HRANA */}
+      <div className="h-[3px] w-full bg-gradient-to-r from-yellow-400 via-orange-500 to-red-600" />
 
-          <p className="text-white/60 max-w-2xl mx-auto">
-            Rezervuj online alebo si nechaj bicykel vyzdvihnúť.
-            Bike Signal robí servis moderne.
-          </p>
-
-          <div className="flex flex-col sm:flex-row justify-center gap-4 pt-4">
-            <Link
-              href="/rezervacia"
-              className="rounded-full bg-[#00a000] text-black px-8 py-4 font-semibold hover:bg-green-600 transition"
-            >
-              Rezervovať servis
-            </Link>
-
-            <Link
-              href="/registracia"
-              className="rounded-full border border-white/20 px-8 py-4 font-semibold hover:bg-white/5 transition"
-            >
-              Vytvoriť účet zdarma
-            </Link>
-          </div>
-        </div>
-      </div>
-
+     
       {/* ================= HLAVNÁ FOOTER ČASŤ ================= */}
       <div className="max-w-6xl mx-auto px-6 py-20 grid md:grid-cols-4 gap-14">
 
@@ -75,7 +49,9 @@ export default function Footer() {
 
         {/* SYSTÉM */}
         <div className="space-y-5">
-          <h4 className="font-semibold text-orange-500">Bike Signal systém</h4>
+          <h4 className="font-semibold text-orange-500">
+            Bike Signal systém
+          </h4>
 
           <div className="flex flex-col gap-3 text-white/60 text-sm">
             <Link href="/registracia" className="hover:text-orange-500 transition">
@@ -97,14 +73,20 @@ export default function Footer() {
           <div className="flex flex-col gap-3 text-white/60 text-sm">
             <div>
               <div className="text-white/40">Email</div>
-              <a href="mailto:info@bikesignal.sk" className="hover:text-red-600 transition">
+              <a
+                href="mailto:info@bikesignal.sk"
+                className="hover:text-red-600 transition"
+              >
                 info@bikesignal.sk
               </a>
             </div>
 
             <div>
               <div className="text-white/40">Telefón</div>
-              <a href="tel:+421900000000" className="hover:text-red-600 transition">
+              <a
+                href="tel:+421900000000"
+                className="hover:text-red-600 transition"
+              >
                 +421 912 345 678
               </a>
             </div>
@@ -139,6 +121,8 @@ export default function Footer() {
 
         </div>
       </div>
+
+      
 
     </footer>
   );

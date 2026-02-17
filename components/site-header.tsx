@@ -3,9 +3,11 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 
 export default function SiteHeader() {
   const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname();
 
   const navLinks = [
     { href: "/home", label: "Domov" },
@@ -16,8 +18,11 @@ export default function SiteHeader() {
     { href: "/kontakt", label: "Kontakt" },
   ];
 
+  const isActive = (href: string) => pathname === href;
+
   return (
-    <header className="fixed top-0 left-0 w-full z-50 bg-black/80 backdrop-blur-md border-b border-white/10">
+    <header className="fixed top-0 left-0 w-full z-50 bg-black/80 backdrop-blur-md">
+
       <div className="max-w-6xl mx-auto flex items-center justify-between px-6 h-20">
 
         {/* LOGO */}
@@ -37,21 +42,32 @@ export default function SiteHeader() {
               BIKE SIGNAL
             </div>
             <div className="text-xs text-white/50">
-              <span className="text-yellow-400">shop</span> • <span className="text-orange-500">service</span> • <span className="text-red-600">support</span>
+              <span className="text-yellow-400">shop</span> •{" "}
+              <span className="text-orange-500">service</span> •{" "}
+              <span className="text-red-600">support</span>
             </div>
           </div>
         </Link>
 
         {/* DESKTOP NAV */}
-        <nav className="hidden md:flex items-center gap-8 text-sm text-white/80">
+        <nav className="hidden md:flex items-center gap-8 text-sm text-white/80 relative">
           {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="hover:text-[#008000] transition duration-200"
-            >
-              {link.label}
-            </Link>
+            <div key={link.href} className="relative">
+              {isActive(link.href) && (
+                <div className="absolute -inset-x-3 -inset-y-2 -skew-x-12 bg-[#00a000] rounded-md z-0 transition-all duration-300" />
+              )}
+
+              <Link
+                href={link.href}
+                className={`relative z-10 transition duration-200 ${
+                  isActive(link.href)
+                    ? "text-black font-semibold"
+                    : "hover:text-[#00ff5f]"
+                }`}
+              >
+                {link.label}
+              </Link>
+            </div>
           ))}
         </nav>
 
@@ -103,7 +119,11 @@ export default function SiteHeader() {
               key={link.href}
               href={link.href}
               onClick={() => setIsOpen(false)}
-              className="block text-lg hover:text-[#00ff5f] transition"
+              className={`block text-lg transition ${
+                isActive(link.href)
+                  ? "text-[#00ff5f] font-semibold"
+                  : "hover:text-[#00ff5f]"
+              }`}
             >
               {link.label}
             </Link>
@@ -118,6 +138,10 @@ export default function SiteHeader() {
           </Link>
         </div>
       </div>
+
+      {/* 🔥 SPODNÁ FAREBNÁ HRANA */}
+      <div className="h-[3px] w-full bg-gradient-to-r from-yellow-400 via-orange-500 to-red-600" />
+
     </header>
   );
 }

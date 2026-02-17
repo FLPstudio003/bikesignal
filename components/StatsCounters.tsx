@@ -66,7 +66,7 @@ export default function StatsCounters() {
   return (
     <section
       ref={sectionRef}
-      className="relative py-28 px-6 bg-black overflow-hidden"
+      className="relative py-28 px-6 bg-transparent overflow-hidden"
     >
       {/* Glow background */}
       <div className="absolute -top-32 -left-32 w-[100px] h-[100px] bg-yellow-400/20 rounded-full blur-3xl" />

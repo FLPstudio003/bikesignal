@@ -1,30 +1,19 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import FadeIn from "@/components/FadeIn";
 import {
-  BadgeCheck,
   ShieldCheck,
-  Wrench,
-  BookOpen,
-  Settings,
-  CheckCircle2,
-  Layers,
-  Target,
   ArrowRight,
-  Star,
-  Sparkles,
-  Shield,
-  ClipboardList,
-  Award,
-  Gauge,
-  Factory,
+  ChevronLeft,
+  ChevronRight,
+  X,
 } from "lucide-react";
 
 /* ============================================================
-   UTIL
+UTIL
 ============================================================ */
 
 function cx(...classes: Array<string | false | undefined | null>) {
@@ -32,7 +21,7 @@ function cx(...classes: Array<string | false | undefined | null>) {
 }
 
 /* ============================================================
-   SECTION WRAPPER
+SECTION WRAPPER
 ============================================================ */
 
 function SectionShell({
@@ -52,7 +41,7 @@ function SectionShell({
 }
 
 /* ============================================================
-   HERO RIGHT PANEL
+HERO PANEL
 ============================================================ */
 
 function HeroPanel() {
@@ -92,93 +81,183 @@ function HeroPanel() {
 }
 
 /* ============================================================
-   CERT CARD
+CERT MODAL
 ============================================================ */
 
-function CertCard({
-  title,
+function CertModal({
   image,
-  description,
+  title,
+  onClose,
 }: {
-  title: string;
   image: string;
-  description: string;
+  title: string;
+  onClose: () => void;
 }) {
+  useEffect(() => {
+    const esc = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+
+    window.addEventListener("keydown", esc);
+    return () => window.removeEventListener("keydown", esc);
+  }, [onClose]);
+
   return (
-    <div className="group relative overflow-hidden rounded-[32px] border border-white/10 bg-black/20 p-8 backdrop-blur-md transition hover:-translate-y-2 hover:border-[#00a000]/60">
+    <div
+      onClick={onClose}
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-6"
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="relative max-w-5xl w-full"
+      >
+        <button
+          onClick={onClose}
+          className="absolute -top-12 right-0 text-white/70 hover:text-white"
+        >
+          <X size={28} />
+        </button>
 
-      <div className="absolute -right-24 -top-24 h-72 w-72 rounded-full bg-[#00a000]/10 blur-3xl opacity-0 group-hover:opacity-100 transition" />
-
-      <div className="relative space-y-6">
-        <div className="flex justify-center">
-          <Image
-            src={image}
-            alt={title}
-            width={220}
-            height={140}
-            className="object-contain h-28 w-auto"
-          />
-        </div>
-
-        <div className="text-center space-y-3">
-          <h3 className="text-xl font-bold">{title}</h3>
-          <p className="text-white/65 text-sm leading-relaxed">
-            {description}
-          </p>
-        </div>
+        <Image
+          src={image}
+          alt={title}
+          width={2000}
+          height={1500}
+          className="object-contain w-full max-h-[90vh]"
+        />
       </div>
     </div>
   );
 }
 
 /* ============================================================
-   MAIN COMPONENT
+CERT CARD
+============================================================ */
+
+function CertCard({
+  title,
+  image,
+  description,
+  onOpen,
+}: {
+  title: string;
+  image: string;
+  description: string;
+  onOpen: () => void;
+}) {
+  return (
+    <div
+      onClick={onOpen}
+      className="cursor-zoom-in group relative h-full overflow-hidden rounded-[32px] border border-white/10 bg-black/20 p-8 backdrop-blur-md transition hover:-translate-y-2 hover:border-[#00a000]/60"
+    >
+      <div className="absolute -right-24 -top-24 h-72 w-72 rounded-full bg-[#00a000]/10 blur-3xl opacity-0 group-hover:opacity-100 transition" />
+
+      <div className="flex justify-center">
+        <div className="relative w-full max-w-[320px] aspect-[4/3] rounded-2xl border border-white/10 bg-black/25 overflow-hidden">
+          <Image
+            src={image}
+            alt={title}
+            width={2000}
+            height={1500}
+            className="object-contain p-4 w-full h-full"
+          />
+        </div>
+      </div>
+
+      <div className="mt-6 text-center space-y-3">
+        <h3 className="text-xl font-bold">{title}</h3>
+        <p className="text-white/65 text-sm leading-relaxed">{description}</p>
+      </div>
+    </div>
+  );
+}
+
+/* ============================================================
+MAIN PAGE
 ============================================================ */
 
 export default function CertifikatyPage() {
   const certs = useMemo(
     () => [
       {
-        title: "Shimano Service Center",
+        title: "Bosch eBike Specialist",
         image: "/cert1.png",
         description:
           "Oficiálne školenia, servisné postupy a diagnostické nástroje podľa štandardov Shimano.",
       },
       {
-        title: "SRAM Certified",
-        image: "/cert3.png",
+        title: "ROCKSHOX",
+        image: "/cart2.png",
         description:
-          "Kompletný servis pohonu, brzdových systémov a elektroniky SRAM podľa výrobcu.",
+          "Kompletný servis pohonu, brzdových systémov a elektroniky podľa výrobcu.",
       },
       {
-        title: "RockShox Suspension",
-        image: "/cert2.png",
+        title: "Certifikát FAZUE",
+        image: "/cert3.png",
         description:
-          "Servis odpruženia vrátane tlmičov a vidlíc podľa oficiálnych manuálov.",
+          "certifikát motorovej jednotky FAZUA .",
+      },
+      {
+        title: "ROCKSHOX",
+        image: "/cert4.png",
+        description: "Kompletný servis pohonu, brzdových systémov a elektroniky podľa výrobcu.",
+      },
+      {
+        title: "e-bike systém Sport Drive",
+        image: "/cert6.png",
+        description: "odborné technické školenie zamerané na e-bike systém Sport Drive, jeho konštrukciu, funkčnosť, diagnostiku a servisné postupy.",
+      },
+      {
+        title: "ROCKSHOX",
+        image: "/cert5.png",
+        description: "Kompletný servis pohonu, brzdových systémov a elektroniky podľa výrobcu.",
+      },
+      {
+        title: "e-bike systém Sport Drive",
+        image: "/cert7.png",
+        description: "odborné technické školenie zamerané na e-bike systém Sport Drive, jeho konštrukciu, funkčnosť, diagnostiku a servisné postupy.",
       },
     ],
     []
   );
 
-  return (
-    <div className="relative">
+  const [modal, setModal] = useState<null | {
+    image: string;
+    title: string;
+  }>(null);
 
-      {/* GLOBAL BACKDROP */}
-      <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-        <div className="absolute -left-[35%] top-[-5%] h-[520px] w-[980px] -rotate-12 rounded-[90px] bg-[#00a000]/10 blur-3xl" />
-        <div className="absolute -right-[35%] top-[18%] h-[520px] w-[980px] rotate-12 rounded-[90px] bg-yellow-400/8 blur-3xl" />
-        <div className="absolute left-[5%] top-[62%] h-[560px] w-[980px] -rotate-6 rounded-[90px] bg-white/5 blur-3xl" />
-      </div>
+  const trackRef = useRef<HTMLDivElement | null>(null);
+
+  const scroll = (dir: "left" | "right") => {
+    const el = trackRef.current;
+    if (!el) return;
+
+    const amount = el.offsetWidth * 0.9;
+
+    el.scrollBy({
+      left: dir === "left" ? -amount : amount,
+      behavior: "smooth",
+    });
+  };
+
+  return (
+    <div className="relative w-full overflow-x-hidden">
+      {modal && (
+        <CertModal
+          image={modal.image}
+          title={modal.title}
+          onClose={() => setModal(null)}
+        />
+      )}
 
       {/* HERO */}
+
       <section className="relative px-6 pt-32 pb-16">
         <div className="max-w-6xl mx-auto grid gap-12 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
-
           <div>
             <FadeIn>
               <h1 className="text-5xl md:text-6xl font-extrabold leading-[1.02]">
-                Certifikovaný{" "}
-                <span className="text-[#00a000]">servis</span>{" "}
+                Certifikovaný <span className="text-[#00a000]">servis</span>{" "}
                 bez kompromisov.
               </h1>
             </FadeIn>
@@ -186,9 +265,8 @@ export default function CertifikatyPage() {
             <FadeIn delay={0.2}>
               <p className="mt-6 text-white/70 text-lg leading-relaxed max-w-2xl">
                 Certifikácia znamená prístup k originálnym dielom,
-                technickým manuálom, pravidelným školeniam a
-                špeciálnym diagnostickým nástrojom.
-                Nerobíme experimenty. Robíme štandard.
+                technickým manuálom, pravidelným školeniam a špeciálnym
+                diagnostickým nástrojom.
               </p>
             </FadeIn>
 
@@ -200,13 +278,6 @@ export default function CertifikatyPage() {
                 >
                   Rezervovať servis <ArrowRight className="inline ml-2 h-4 w-4" />
                 </Link>
-
-                <Link
-                  href="/servis"
-                  className="rounded-2xl border border-white/20 px-8 py-4 font-semibold text-white/80 hover:bg-white/5 transition"
-                >
-                  Pozrieť služby
-                </Link>
               </div>
             </FadeIn>
           </div>
@@ -214,39 +285,68 @@ export default function CertifikatyPage() {
           <FadeIn delay={0.2}>
             <HeroPanel />
           </FadeIn>
-
         </div>
       </section>
 
       {/* CERTS */}
+
       <SectionShell className="py-20">
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="flex items-end justify-between mb-10">
+          <div>
+            <div className="text-xs text-white/50 uppercase tracking-wider">
+              Certifikáty & školenia
+            </div>
+
+            <h2 className="mt-2 text-3xl font-extrabold">
+              Oficiálne <span className="text-[#00a000]">štandardy</span>
+            </h2>
+          </div>
+
+          <div className="hidden md:flex gap-2">
+            <button
+              onClick={() => scroll("left")}
+              className="h-11 w-11 flex items-center justify-center rounded-2xl border border-white/20"
+            >
+              <ChevronLeft />
+            </button>
+
+            <button
+              onClick={() => scroll("right")}
+              className="h-11 w-11 flex items-center justify-center rounded-2xl border border-white/20"
+            >
+              <ChevronRight />
+            </button>
+          </div>
+        </div>
+
+        <div
+          ref={trackRef}
+          className="flex gap-8 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-6
+          [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+        >
           {certs.map((cert, i) => (
-            <FadeIn key={i} delay={i * 0.1}>
-              <CertCard {...cert} />
-            </FadeIn>
+            <div
+              key={i}
+              className="snap-start w-[85vw] sm:w-[45%] lg:w-[31%] flex-shrink-0"
+            >
+              <FadeIn delay={i * 0.05}>
+                <CertCard
+                  {...cert}
+                  onOpen={() =>
+                    setModal({
+                      image: cert.image,
+                      title: cert.title,
+                    })
+                  }
+                />
+              </FadeIn>
+            </div>
           ))}
         </div>
       </SectionShell>
 
-      {/* WHY SECTION */}
-      <SectionShell className="py-20">
-        <FadeIn>
-          <h2 className="text-4xl font-extrabold text-center">
-            Prečo je to <span className="text-[#00a000]">dôležité?</span>
-          </h2>
-        </FadeIn>
-
-        <FadeIn delay={0.2}>
-          <p className="mt-8 text-white/70 text-lg max-w-3xl mx-auto text-center leading-relaxed">
-            Certifikovaný servis znamená správne postupy,
-            originálne diely, bezpečnosť a technickú podporu.
-            Každý zásah má dôvod a presný proces.
-          </p>
-        </FadeIn>
-      </SectionShell>
-
       {/* CTA */}
+
       <SectionShell className="py-20 pb-32 text-center">
         <FadeIn>
           <h3 className="text-3xl font-extrabold">
@@ -263,7 +363,6 @@ export default function CertifikatyPage() {
           </Link>
         </FadeIn>
       </SectionShell>
-
     </div>
   );
 }

@@ -47,9 +47,9 @@ export default function ONasPage() {
                 </h2>
 
                 <p className="text-white/70 leading-relaxed text-lg">
-                  Cyklistika je o pocite kontroly, presnosti a spoľahlivosti.
-                  Servis by mal byť rovnaký. Žiadne „možno zajtra“, žiadne
-                  „uvidíme“. Len jasný proces a systém.
+                  Cyklistika je o pocite <span className="text-yellow-400">kontroly</span>, <span className="text-orange-500">presnosti</span> a <span className="text-red-600">spoľahlivosti</span>.
+                  Servis by mal byť rovnaký. Žiadne <span className="text-yellow-400">„</span>možno zajtra<span className="text-orange-500">“</span>, žiadne
+                  <span className="text-orange-500">„</span>uvidíme<span className="text-red-600">“</span>. Len jasný proces a systém.
                 </p>
 
                 <p className="text-white/60 leading-relaxed">
@@ -81,7 +81,7 @@ export default function ONasPage() {
 
             <FadeIn>
               <h2 className="text-3xl md:text-4xl font-bold text-center">
-                Naše hodnoty
+                Naše <span className="text-[#008000]">hodnoty</span>
               </h2>
             </FadeIn>
 
@@ -128,7 +128,7 @@ export default function ONasPage() {
 
             <FadeIn>
               <h2 className="text-3xl md:text-4xl font-bold">
-                Dôvera sa buduje systémom.
+                Dôvera sa <span className="text-[#008000]">buduje</span> systémom.
               </h2>
             </FadeIn>
 

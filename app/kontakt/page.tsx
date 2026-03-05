@@ -34,22 +34,22 @@ export default function KontaktPage() {
           {/* KONTAKT */}
           <FadeIn>
             <div className="rounded-3xl border border-white/10 bg-black p-10 space-y-6">
-              <h2 className="text-xl font-semibold text-[#00a000]">Kontakt</h2>
+              <h2 className="text-xl font-semibold text-[#008000]">Kontakt</h2>
 
               <div className="space-y-3 text-white/80">
                 <div>
-                  <span className="text-white/50">Telefón:</span><br />
-                  +421 912 345 678
+                  <span className="text-yellow-400">Telefón:</span><br />
+                  +421 58/733 16 90
                 </div>
 
                 <div>
-                  <span className="text-white/50">Email:</span><br />
-                  info@bikesignal.sk
+                  <span className="text-orange-500">Email:</span><br />
+                  bikesignal@gmail.com
                 </div>
 
                 <div>
-                  <span className="text-white/50">Adresa:</span><br />
-                  Šafárikova 6<br />
+                  <span className="text-red-600">Adresa:</span><br />
+                  Šafárikova 375/6<br />
                   048 01 Rožňava
                 </div>
               </div>
@@ -78,7 +78,7 @@ export default function KontaktPage() {
             <div className="rounded-3xl overflow-hidden border-2 border-[#00a000]">
 
               <iframe
-                src="https://www.google.com/maps?q=Safarikova+6,+Roznava&output=embed"
+                src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d658.8276957211816!2d20.531486272491442!3d48.66129882713459!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x473faf81cf421341%3A0xb926fb48da5a77ec!2sBicykle%20Signal%20s.r.o.!5e0!3m2!1ssk!2sus!4v1771852306890!5m2!1ssk!2sus"
                 width="100%"
                 height="450"
                 loading="lazy"

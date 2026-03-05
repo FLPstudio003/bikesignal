@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -9,22 +9,29 @@ export default function SiteHeader() {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
 
-  const navLinks = [
-    { href: "/home", label: "Domov" },
-    { href: "/servis", label: "Servis" },
-    { href: "/pickup", label: "Dovoz / odvoz" },
-    { href: "/certifikaty", label: "Certifikáty" },
-    { href: "/o-nas", label: "O nás" },
-    { href: "/kontakt", label: "Kontakt" },
-  ];
+  const navLinks = useMemo(
+    () => [
+      { href: "/home", label: "Domov" },
+      { href: "/servis", label: "Servis" }, // dropdown (leto/zima)
+      { href: "/pickup", label: "Dovoz / odvoz" },
+      { href: "/prenajom", label: "Prenájom" }, // NEW
+      { href: "/certifikaty", label: "Certifikáty" },
+      { href: "/o-nas", label: "O nás" },
+      { href: "/kontakt", label: "Kontakt" },
+    ],
+    []
+  );
 
   const isActive = (href: string) => pathname === href;
 
+  const isServisActive =
+    pathname === "/servis" ||
+    pathname.startsWith("/servis/") ||
+    pathname.startsWith("/servis?");
+
   return (
     <header className="fixed top-0 left-0 w-full z-50 bg-black/80 backdrop-blur-md">
-
       <div className="max-w-6xl mx-auto flex items-center justify-between px-6 h-20">
-
         {/* LOGO */}
         <Link href="/home" className="flex items-center gap-3">
           <div className="relative h-10 w-10">
@@ -51,29 +58,76 @@ export default function SiteHeader() {
 
         {/* DESKTOP NAV */}
         <nav className="hidden md:flex items-center gap-8 text-sm text-white/80 relative">
-          {navLinks.map((link) => (
-            <div key={link.href} className="relative">
-              {isActive(link.href) && (
-                <div className="absolute -inset-x-3 -inset-y-2 -skew-x-12 bg-[#00a000] rounded-md z-0 transition-all duration-300" />
-              )}
+          {navLinks.map((link) => {
+            // SERVIS dropdown
+            if (link.href === "/servis") {
+              return (
+                <div key={link.href} className="relative group">
+                  {/* ACTIVE BACKGROUND */}
+                  {isServisActive && (
+                    <div className="absolute -inset-x-3 -inset-y-2 -skew-x-12 bg-[#00a000] rounded-md z-0 transition-all duration-300" />
+                  )}
 
-              <Link
-                href={link.href}
-                className={`relative z-10 transition duration-200 ${
-                  isActive(link.href)
-                    ? "text-black font-semibold"
-                    : "hover:text-[#00ff5f]"
-                }`}
-              >
-                {link.label}
-              </Link>
-            </div>
-          ))}
+                  {/* SERVIS LINK */}
+                  <Link
+                    href="/servis"
+                    className={`relative z-10 transition duration-200 ${
+                      isServisActive
+                        ? "text-black font-semibold"
+                        : "hover:text-[#00ff5f]"
+                    }`}
+                  >
+                    Servis
+                  </Link>
+
+                  {/* HOVER BRIDGE (aby to “neodlepilo” hover pri prechode myšou) */}
+                  <div className="absolute left-1/2 -translate-x-1/2 top-full h-3 w-44" />
+
+                  {/* DROPDOWN */}
+                  <div className="absolute left-1/2 -translate-x-1/2 top-[calc(100%+10px)] hidden group-hover:block z-50">
+                    <div className="w-52 rounded-2xl border border-white/10 bg-black/90 backdrop-blur-md shadow-2xl overflow-hidden">
+                      <Link
+                        href="/servis?season=leto#sezona"
+                        className="block px-5 py-3 text-white/85 hover:bg-white/5 transition"
+                      >
+                        Letná sezóna
+                      </Link>
+                      <Link
+                        href="/servis?season=zima#sezona"
+                        className="block px-5 py-3 text-white/85 hover:bg-white/5 transition"
+                      >
+                        Zimná sezóna
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              );
+            }
+
+            // NORMAL LINKS
+            return (
+              <div key={link.href} className="relative">
+                {isActive(link.href) && (
+                  <div className="absolute -inset-x-3 -inset-y-2 -skew-x-12 bg-[#00a000] rounded-md z-0 transition-all duration-300" />
+                )}
+
+                <Link
+                  href={link.href}
+                  className={`relative z-10 transition duration-200 ${
+                    isActive(link.href)
+                      ? "text-black font-semibold"
+                      : "hover:text-[#00ff5f]"
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              </div>
+            );
+          })}
         </nav>
 
         {/* RIGHT SIDE */}
         <div className="flex items-center gap-4">
-
           {/* CTA */}
           <Link
             href="/rezervacia"
@@ -86,6 +140,7 @@ export default function SiteHeader() {
           <button
             onClick={() => setIsOpen(!isOpen)}
             className="md:hidden flex flex-col justify-center items-center w-10 h-10 rounded-full border border-white/20 hover:border-[#00ff5f] transition"
+            aria-label="Menu"
           >
             <span
               className={`block h-0.5 w-5 bg-white transition-transform duration-300 ${
@@ -109,25 +164,59 @@ export default function SiteHeader() {
       {/* MOBILE MENU */}
       <div
         className={`md:hidden overflow-hidden transition-all duration-300 ${
-          isOpen ? "max-h-[500px]" : "max-h-0"
+          isOpen ? "max-h-[650px]" : "max-h-0"
         }`}
       >
         <div className="bg-black border-t border-white/10 px-6 py-6 space-y-5 text-white/80">
-
-          {navLinks.map((link) => (
+          {/* SERVIS (mobile) */}
+          <div className="space-y-3">
             <Link
-              key={link.href}
-              href={link.href}
+              href="/servis"
               onClick={() => setIsOpen(false)}
               className={`block text-lg transition ${
-                isActive(link.href)
+                isServisActive
                   ? "text-[#00ff5f] font-semibold"
                   : "hover:text-[#00ff5f]"
               }`}
             >
-              {link.label}
+              Servis
             </Link>
-          ))}
+
+            <div className="pl-3 space-y-2">
+              <Link
+                href="/servis?season=leto#sezona"
+                onClick={() => setIsOpen(false)}
+                className="block text-base text-white/70 hover:text-[#00ff5f] transition"
+              >
+                Letná sezóna
+              </Link>
+              <Link
+                href="/servis?season=zima#sezona"
+                onClick={() => setIsOpen(false)}
+                className="block text-base text-white/70 hover:text-[#00ff5f] transition"
+              >
+                Zimná sezóna
+              </Link>
+            </div>
+          </div>
+
+          {/* OTHER LINKS */}
+          {navLinks
+            .filter((x) => x.href !== "/servis")
+            .map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                onClick={() => setIsOpen(false)}
+                className={`block text-lg transition ${
+                  isActive(link.href)
+                    ? "text-[#00ff5f] font-semibold"
+                    : "hover:text-[#00ff5f]"
+                }`}
+              >
+                {link.label}
+              </Link>
+            ))}
 
           <Link
             href="/rezervacia"
@@ -141,7 +230,6 @@ export default function SiteHeader() {
 
       {/* 🔥 SPODNÁ FAREBNÁ HRANA */}
       <div className="h-[3px] w-full bg-gradient-to-r from-yellow-400 via-orange-500 to-red-600" />
-
     </header>
   );
 }

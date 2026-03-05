@@ -84,7 +84,7 @@ export default function Footer() {
                 href="mailto:info@bikesignal.sk"
                 className="hover:text-red-600 transition"
               >
-                info@bikesignal.sk
+                bikesignal@gmail.com
               </a>
             </div>
 
@@ -94,13 +94,13 @@ export default function Footer() {
                 href="tel:+421900000000"
                 className="hover:text-red-600 transition"
               >
-                +421 912 345 678
+                +421 58/733 16 90
               </a>
             </div>
 
             <div>
               <div className="text-white/40">Prevádzka</div>
-              <div>Šafárikova 6, 048 01 Rožňava</div>
+              <div>Šafárikova 375/6, 048 01 Rožňava</div>
             </div>
           </div>
         </div>

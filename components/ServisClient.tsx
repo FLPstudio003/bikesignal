@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import FadeIn from "@/components/FadeIn";
 import {
@@ -159,7 +160,7 @@ function DiagonalSwitch({
         className={cx(
           "w-full sm:w-auto px-6 sm:px-10 py-4 font-semibold transition transform -skew-x-12 border rounded-2xl",
           season === "leto"
-            ? "bg-[#00a000] text-black border-[#00a000] scale-[1.02]"
+            ? "bg-[#008000] text-black border-[#00a000] scale-[1.02]"
             : "bg-black/20 text-white/80 border-white/10 hover:bg-white/5"
         )}
       >
@@ -175,7 +176,7 @@ function DiagonalSwitch({
         className={cx(
           "w-full sm:w-auto px-6 sm:px-10 py-4 font-semibold transition transform -skew-x-12 border rounded-2xl",
           season === "zima"
-            ? "bg-red-500 text-black border-red-500 scale-[1.02]"
+            ? "bg-[#5bfff5] text-black border-[#5bfff5] scale-[1.02]"
             : "bg-black/20 text-white/80 border-white/10 hover:bg-white/5"
         )}
       >
@@ -214,13 +215,13 @@ function ServiceAccordionCard({
   index: number;
   open: number | null;
   setOpen: (v: number | null) => void;
-  accent: "green" | "red";
+  accent: "green" | "blue";
 }) {
   const isOpen = open === index;
   const accentClass =
     accent === "green"
-      ? "border-[#00a000]/35 bg-[#00a000]/8 text-[#00a000]"
-      : "border-red-500/35 bg-red-500/10 text-red-400";
+      ? "border-[#008000]/35 bg-[#008000]/8 text-[#008000]"
+      : "border-[#5bdac3]/35 bg-[#5bdac3]/10 text-[#5bdac3]";
 
   return (
     <div className="rounded-[28px] border border-white/10 bg-black/20 backdrop-blur-md overflow-hidden transition hover:border-white/20">
@@ -339,16 +340,7 @@ function PackageCard({ item }: { item: PackageItem }) {
         <p className="mt-4 text-white/65">{item.short}</p>
 
         <div className="mt-6 grid gap-2 text-sm text-white/75">
-          <div className="flex items-center gap-2">
-            <Timer className="h-4 w-4 text-[#00a000]" />
-            <span className="text-white/60">Čas:</span>
-            <span className="font-semibold text-white">{item.time}</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <Target className="h-4 w-4 text-[#00a000]" />
-            <span className="text-white/60">Ideálne pre:</span>
-            <span className="font-semibold text-white">{item.idealFor}</span>
-          </div>
+          
         </div>
 
         <div className="mt-6 rounded-2xl border border-white/10 bg-black/20 p-4">
@@ -443,6 +435,17 @@ function FAQItem({
 
 export default function ServisPage() {
   const [season, setSeason] = useState<Season>("leto");
+  const searchParams = useSearchParams();
+
+useEffect(() => {
+  const seasonParam = searchParams.get("season");
+
+  if (seasonParam === "zima") {
+    setSeason("zima");
+  } else {
+    setSeason("leto");
+  }
+}, [searchParams]);
   const [open, setOpen] = useState<number | null>(0);
   const [faqOpen, setFaqOpen] = useState<number | null>(null);
 
@@ -625,7 +628,7 @@ export default function ServisPage() {
   );
 
   const services = season === "leto" ? summerServices : winterServices;
-  const seasonAccent: "green" | "red" = season === "leto" ? "green" : "red";
+  const seasonAccent: "green" | "blue" = season === "leto" ? "green" : "blue";
 
   const heroRightBadge =
     season === "leto" ? "Letná sezóna" : "Zimná sezóna";

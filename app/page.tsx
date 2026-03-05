@@ -8,7 +8,7 @@ export default function LandingPage() {
       {/* BACKGROUND IMAGE */}
       <div className="absolute inset-0 -z-10">
         <Image
-          src="/hero_bgtest.png"   // <-- TU ZMEN NÁZOV
+          src="/uvod_bg.png"   // <-- TU ZMEN NÁZOV
           alt="Background"
           fill
           priority

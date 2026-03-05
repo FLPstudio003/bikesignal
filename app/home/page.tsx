@@ -17,7 +17,7 @@ export default function HomePage() {
       <section
         className="relative min-h-[85vh] md:min-h-screen flex items-center justify-center text-center px-6 pt-24 md:pt-0"
         style={{
-          backgroundImage: "url('/hero_bgFF.png')",
+          backgroundImage: "url('/bg_aktual.png')",
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
@@ -34,7 +34,7 @@ export default function HomePage() {
                   textShadow: "0 0 4px black",
                 }}
               >
-                nad každým kilometrom.
+                <span className="text-yellow-400">nad</span> <span className="text-orange-500">každým</span> <span className="text-red-600">kilometrom.</span>
               </span>
             </h1>
           </FadeIn>
@@ -340,7 +340,7 @@ export default function HomePage() {
             <FadeIn delay={0.15}>
               <Link
                 href="/servis"
-                className="self-start md:self-auto inline-flex items-center gap-2 bg-orange-500 text-black px-6 py-3 rounded-full font-semibold hover:bg-red-600 transition"
+                className="self-start md:self-auto inline-flex items-center gap-2 bg-[#008000] text-black px-6 py-3 rounded-full font-semibold hover:bg-yellow-400 transition"
               >
                 Celá ponuka <span aria-hidden>→</span>
               </Link>
@@ -351,7 +351,7 @@ export default function HomePage() {
             <div className="grid md:grid-cols-2 gap-14 items-center">
               <FadeIn>
                 <img
-                  src="/servis1.png"
+                  src="/ss1.png"
                   alt="Kompletný servis bicykla"
                   className="w-full h-[360px] md:h-[520px] object-cover rounded-2xl"
                 />
@@ -403,7 +403,7 @@ export default function HomePage() {
 
               <FadeIn className="order-1 md:order-2">
                 <img
-                  src="/servis2.png"
+                  src="/ss2.png"
                   alt="Servis tlmičov a vidlíc"
                   className="w-full h-[360px] md:h-[520px] object-cover rounded-2xl"
                 />

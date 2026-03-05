@@ -145,7 +145,7 @@ export default function Overview({ profile }: any) {
             </div>
 
             <div className="text-3xl font-bold text-white mt-2">
-              {tier.multiplier}x
+              {tierMultiplier}x
             </div>
 
           </div>

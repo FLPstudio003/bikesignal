@@ -29,10 +29,7 @@ export default function HomePage() {
               Servis, ktorý má kontrolu
               <span
                 className="block text-[#00a000]"
-                style={{
-                  WebkitTextStroke: "2px black",
-                  textShadow: "0 0 4px black",
-                }}
+                
               >
                 <span className="text-yellow-400">nad</span> <span className="text-orange-500">každým</span> <span className="text-red-600">kilometrom.</span>
               </span>

@@ -3,7 +3,7 @@
 import { motion } from "framer-motion"
 import { Bike, Trophy, Activity, Zap, Wrench, TrendingUp } from "lucide-react"
 import TierBadge from "@/components/TierBadge"
-import { getTier } from "@/lib/tier"
+import { getTier, getMultiplier } from "@/lib/tier"
 
 export default function Overview({ profile }: any) {
 
@@ -11,6 +11,7 @@ export default function Overview({ profile }: any) {
   const points = profile?.loyalty_points || 50
 
   const tier = getTier(km)
+  const multiplier = getMultiplier(tier)
 
   const weeklyKm = 120
   const monthlyKm = 480
@@ -145,7 +146,7 @@ export default function Overview({ profile }: any) {
             </div>
 
             <div className="text-3xl font-bold text-white mt-2">
-              {tierMultiplier}x
+              {multiplier}x
             </div>
 
           </div>

@@ -1,70 +1,30 @@
-"use client"
+export default function DashboardPage() {
+  return (
+    <div>
 
-import {useEffect,useState} from "react"
-import {supabase} from "@/lib/supabase"
+      <h1 className="text-3xl font-bold mb-8">
+        Prehľad
+      </h1>
 
-import DashboardHeader from "@/components/DashboardHeader"
+      <div className="grid grid-cols-3 gap-6">
 
-import RiderHero from "@/components/dashboard/RiderHero"
-import Overview from "@/components/dashboard/Overview"
-import BikeGarage from "@/components/dashboard/BikeGarage"
-import Profile from "@/components/dashboard/Profile"
+        <div className="bg-neutral-900 p-6 rounded-xl">
+          <p className="text-neutral-400 text-sm">Týždeň</p>
+          <p className="text-3xl font-bold">120 km</p>
+        </div>
 
-export default function Dashboard(){
+        <div className="bg-neutral-900 p-6 rounded-xl">
+          <p className="text-neutral-400 text-sm">Mesiac</p>
+          <p className="text-3xl font-bold">480 km</p>
+        </div>
 
-const [profile,setProfile] = useState<any>(null)
-const [loading,setLoading] = useState(true)
+        <div className="bg-neutral-900 p-6 rounded-xl">
+          <p className="text-neutral-400 text-sm">Celkom</p>
+          <p className="text-3xl font-bold">0 km</p>
+        </div>
 
-useEffect(()=>{
+      </div>
 
-const load = async ()=>{
-
-const {data:{user}} = await supabase.auth.getUser()
-
-if(!user){
-
-window.location.href="/login"
-return
-
-}
-
-const {data} = await supabase
-.from("profiles")
-.select("*")
-.eq("email",user.email)
-.single()
-
-setProfile(data)
-setLoading(false)
-
-}
-
-load()
-
-},[])
-
-if(loading){
-
-return <div className="text-white p-10">Loading...</div>
-
-}
-
-return(
-
-<div className="bg-black min-h-screen">
-
-<DashboardHeader user={profile}/>
-
-<RiderHero profile={profile}/>
-
-<Overview profile={profile}/>
-
-<BikeGarage/>
-
-<Profile profile={profile}/>
-
-</div>
-
-)
-
+    </div>
+  )
 }

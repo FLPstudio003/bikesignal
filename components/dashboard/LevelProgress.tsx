@@ -1,6 +1,4 @@
-export default function RiderHero({profile,stats}:any){
-
-const totalKm = stats?.totalKm || 0
+export default function LevelProgress({totalKm}:any){
 
 const levels = [
 { name:"Bronze", km:0 },
@@ -14,10 +12,14 @@ let current = levels[0]
 let next = levels[1]
 
 for(let i=0;i<levels.length;i++){
+
 if(totalKm >= levels[i].km){
+
 current = levels[i]
 next = levels[i+1] || levels[i]
+
 }
+
 }
 
 const progress = Math.min(
@@ -27,22 +29,14 @@ const progress = Math.min(
 
 return(
 
-<div className="border border-neutral-800 rounded-2xl p-10 bg-neutral-900">
+<div className="mt-6">
 
-<h1 className="text-5xl font-bold">
-
-{profile?.full_name}
-
-</h1>
-
-<p className="text-neutral-400 mt-2">
-{profile?.email}
-</p>
-
-<div className="mt-6 flex items-center gap-4">
+<div className="flex items-center gap-4">
 
 <div className="px-4 py-2 rounded-full bg-green-500/20 text-green-400">
+
 {current.name} Rider
+
 </div>
 
 <div className="text-sm text-neutral-400">
@@ -53,7 +47,7 @@ return(
 
 </div>
 
-<div className="mt-4 w-full bg-neutral-800 h-2 rounded">
+<div className="w-full h-2 bg-neutral-800 rounded mt-3">
 
 <div
 className="bg-green-400 h-2 rounded"

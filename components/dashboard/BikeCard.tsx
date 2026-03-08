@@ -1,4 +1,4 @@
-export default function BikeCard({bike}){
+export default function BikeCard({bike}: any){
 
 return(
 

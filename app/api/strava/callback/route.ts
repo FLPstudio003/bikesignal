@@ -1,39 +1,23 @@
 import { NextResponse } from "next/server"
-import { createServerClient } from "@supabase/ssr"
-import { cookies } from "next/headers"
+import { createClient } from "@supabase/supabase-js"
 
 export async function GET(req: Request) {
 
   const url = new URL(req.url)
-  const code = url.searchParams.get("code")
 
-  if (!code) {
-    return NextResponse.redirect(`${process.env.NEXT_PUBLIC_SITE_URL}/dashboard`)
+  const code = url.searchParams.get("code")
+  const user_id = url.searchParams.get("state")
+
+  if (!code || !user_id) {
+    return NextResponse.redirect("https://bikesignal.vercel.app/login")
   }
 
-  const cookieStore = await cookies()
-
-  const supabase = createServerClient(
+  const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get(name: string) {
-          return cookieStore.get(name)?.value
-        }
-      }
-    }
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
   )
 
-  const {
-    data: { user }
-  } = await supabase.auth.getUser()
-
-  if (!user) {
-    return NextResponse.redirect(`${process.env.NEXT_PUBLIC_SITE_URL}/login`)
-  }
-
-  /* EXCHANGE CODE -> STRAVA TOKEN */
+  /* exchange code */
 
   const tokenResponse = await fetch("https://www.strava.com/oauth/token", {
     method: "POST",
@@ -53,36 +37,24 @@ export async function GET(req: Request) {
   const access_token = token.access_token
   const refresh_token = token.refresh_token
   const expires_at = token.expires_at
-  const athlete_id = token.athlete?.id
-  const username = token.athlete?.username
-  const firstname = token.athlete?.firstname
-  const lastname = token.athlete?.lastname
 
-  /* SAVE TOKEN */
+  /* save token */
 
   await supabase
     .from("strava_tokens")
     .upsert({
-      user_id: user.id,
-      athlete_id,
+      user_id,
       access_token,
       refresh_token,
       expires_at
     })
 
-  /* UPDATE PROFILE */
+  /* mark connected */
 
   await supabase
     .from("profiles")
-    .update({
-      strava_connected: true,
-      strava_id: athlete_id,
-      strava_username: username,
-      full_name: `${firstname} ${lastname}`
-    })
-    .eq("id", user.id)
+    .update({ strava_connected: true })
+    .eq("id", user_id)
 
-  /* REDIRECT BACK */
-
-  return NextResponse.redirect(`${process.env.NEXT_PUBLIC_SITE_URL}/dashboard`)
+  return NextResponse.redirect("https://bikesignal.vercel.app/dashboard")
 }

@@ -222,7 +222,7 @@ export default function DashboardPage(){
 
       }
 
-      const prev=new Date(last)
+      const prev: Date = new Date(last!)
 
       prev.setDate(prev.getDate()-1)
 

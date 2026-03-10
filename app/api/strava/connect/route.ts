@@ -4,7 +4,7 @@ import { cookies } from "next/headers"
 
 export async function GET() {
 
-  const cookieStore = cookies()
+  const cookieStore = await cookies()
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -13,8 +13,8 @@ export async function GET() {
       cookies: {
         get(name: string) {
           return cookieStore.get(name)?.value
-        }
-      }
+        },
+      },
     }
   )
 

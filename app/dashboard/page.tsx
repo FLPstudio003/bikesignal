@@ -25,7 +25,7 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 )
 
-export default function DashboardPage() {
+export default function DashboardPage(){
 
   const [profile,setProfile] = useState<any>(null)
   const [rides,setRides] = useState<any[]>([])
@@ -43,10 +43,19 @@ export default function DashboardPage() {
 
   async function init(){
 
+    const {data:{session}} = await supabase.auth.getSession()
+
+    if(!session){
+      window.location.href="/login"
+      return
+    }
+
     await loadProfile()
 
-    // ak je strava pripojena sprav sync
-    await fetch("/api/strava/sync").catch(()=>{})
+    // sync strava rides
+    try{
+      await fetch("/api/strava/sync")
+    }catch{}
 
     await loadRides()
     await loadLeaderboard()
@@ -57,13 +66,19 @@ export default function DashboardPage() {
   async function loadProfile(){
 
     const { data:{user} } = await supabase.auth.getUser()
+
     if(!user) return
 
-    const {data} = await supabase
+    const {data,error} = await supabase
       .from("profiles")
       .select("*")
       .eq("id",user.id)
       .single()
+
+    if(error){
+      console.log("profile error",error)
+      return
+    }
 
     setProfile(data)
   }
@@ -126,10 +141,10 @@ export default function DashboardPage() {
 
   }
 
-  const name = profile?.full_name || "Rider"
+  const name = profile?.full_name || profile?.email || "Rider"
   const avatar = name.charAt(0)
 
-  const points = profile?.loyalty_points || 0
+  const points = profile?.points || 0
   const stravaConnected = profile?.strava_connected
 
   const totalKm = Math.round(
@@ -159,7 +174,7 @@ export default function DashboardPage() {
 
   }
 
-  const progress=
+  const progress =
     ((points-current.points)/(next.points-current.points))*100
 
   /* WEEK GRAPH */
@@ -207,7 +222,7 @@ export default function DashboardPage() {
 
       }
 
-      const prev: Date = new Date(last!)
+      const prev=new Date(last)
 
       prev.setDate(prev.getDate()-1)
 
@@ -246,7 +261,9 @@ export default function DashboardPage() {
 
           <div>
 
-            <h1 className="text-xl font-semibold">{name}</h1>
+            <h1 className="text-xl font-semibold">
+              {name}
+            </h1>
 
             <p className="text-sm text-neutral-400">
               Level: {current.level}
@@ -294,29 +311,10 @@ export default function DashboardPage() {
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
 
-        <StatCard
-          title="Total Distance"
-          value={`${totalKm} km`}
-          icon={<Bike/>}
-        />
-
-        <StatCard
-          title="Total Rides"
-          value={rides.length}
-          icon={<Activity/>}
-        />
-
-        <StatCard
-          title="Ride Streak"
-          value={`${streak} days`}
-          icon={<Flame/>}
-        />
-
-        <StatCard
-          title="Points"
-          value={points}
-          icon={<Trophy/>}
-        />
+        <StatCard title="Total Distance" value={`${totalKm} km`} icon={<Bike/>}/>
+        <StatCard title="Total Rides" value={rides.length} icon={<Activity/>}/>
+        <StatCard title="Ride Streak" value={`${streak} days`} icon={<Flame/>}/>
+        <StatCard title="Points" value={points} icon={<Trophy/>}/>
 
       </div>
 
@@ -343,11 +341,7 @@ export default function DashboardPage() {
                 }}
               />
 
-              <Bar
-                dataKey="km"
-                fill="#008000"
-                radius={[6,6,0,0]}
-              >
+              <Bar dataKey="km" fill="#008000" radius={[6,6,0,0]}>
 
                 <LabelList
                   dataKey="km"
@@ -378,26 +372,9 @@ export default function DashboardPage() {
 
           <div className="flex gap-2">
 
-            <SwitchButton
-              label="Week"
-              value="week"
-              range={range}
-              setRange={setRange}
-            />
-
-            <SwitchButton
-              label="Month"
-              value="month"
-              range={range}
-              setRange={setRange}
-            />
-
-            <SwitchButton
-              label="All"
-              value="all"
-              range={range}
-              setRange={setRange}
-            />
+            <SwitchButton label="Week" value="week" range={range} setRange={setRange}/>
+            <SwitchButton label="Month" value="month" range={range} setRange={setRange}/>
+            <SwitchButton label="All" value="all" range={range} setRange={setRange}/>
 
           </div>
 
@@ -406,12 +383,7 @@ export default function DashboardPage() {
         <div className="flex flex-col gap-3">
 
           {leaderboard.map((r:any,i:number)=>(
-            <LeaderboardRow
-              key={i}
-              rank={i+1}
-              name={r.name}
-              km={r.km}
-            />
+            <LeaderboardRow key={i} rank={i+1} name={r.name} km={r.km}/>
           ))}
 
         </div>

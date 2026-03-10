@@ -8,10 +8,10 @@ export async function GET(req: Request) {
   const code = url.searchParams.get("code")
 
   if (!code) {
-    return NextResponse.redirect("http://localhost:3000/dashboard")
+    return NextResponse.redirect(`${process.env.NEXT_PUBLIC_SITE_URL}/dashboard`)
   }
 
-  const cookieStore = cookies()
+  const cookieStore = await cookies()
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -30,10 +30,10 @@ export async function GET(req: Request) {
   } = await supabase.auth.getUser()
 
   if (!user) {
-    return NextResponse.redirect("http://localhost:3000/login")
+    return NextResponse.redirect(`${process.env.NEXT_PUBLIC_SITE_URL}/login`)
   }
 
-  /* EXCHANGE CODE -> TOKEN */
+  /* EXCHANGE CODE -> STRAVA TOKEN */
 
   const tokenResponse = await fetch("https://www.strava.com/oauth/token", {
     method: "POST",
@@ -53,6 +53,10 @@ export async function GET(req: Request) {
   const access_token = token.access_token
   const refresh_token = token.refresh_token
   const expires_at = token.expires_at
+  const athlete_id = token.athlete?.id
+  const username = token.athlete?.username
+  const firstname = token.athlete?.firstname
+  const lastname = token.athlete?.lastname
 
   /* SAVE TOKEN */
 
@@ -60,19 +64,25 @@ export async function GET(req: Request) {
     .from("strava_tokens")
     .upsert({
       user_id: user.id,
+      athlete_id,
       access_token,
       refresh_token,
       expires_at
     })
 
-  /* SET CONNECTED */
+  /* UPDATE PROFILE */
 
   await supabase
     .from("profiles")
-    .update({ strava_connected: true })
+    .update({
+      strava_connected: true,
+      strava_id: athlete_id,
+      strava_username: username,
+      full_name: `${firstname} ${lastname}`
+    })
     .eq("id", user.id)
 
-  /* REDIRECT */
+  /* REDIRECT BACK */
 
-  return NextResponse.redirect("http://localhost:3000/dashboard")
+  return NextResponse.redirect(`${process.env.NEXT_PUBLIC_SITE_URL}/dashboard`)
 }

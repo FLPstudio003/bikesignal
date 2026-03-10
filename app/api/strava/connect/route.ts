@@ -13,12 +13,6 @@ export async function GET() {
       cookies: {
         get(name: string) {
           return cookieStore.get(name)?.value
-        },
-        set(name: string, value: string, options: any) {
-          cookieStore.set(name, value, options)
-        },
-        remove(name: string, options: any) {
-          cookieStore.set(name, "", options)
         }
       }
     }
@@ -27,9 +21,7 @@ export async function GET() {
   const { data: { user } } = await supabase.auth.getUser()
 
   if (!user) {
-    return NextResponse.redirect(
-      `${process.env.NEXT_PUBLIC_SITE_URL}/login`
-    )
+    return NextResponse.redirect("https://bikesignal.vercel.app/login")
   }
 
   const url =
@@ -38,7 +30,8 @@ export async function GET() {
     `&response_type=code` +
     `&redirect_uri=${process.env.STRAVA_REDIRECT_URI}` +
     `&approval_prompt=auto` +
-    `&scope=read,activity:read_all`
+    `&scope=read,activity:read_all` +
+    `&state=${user.id}`
 
   return NextResponse.redirect(url)
 }

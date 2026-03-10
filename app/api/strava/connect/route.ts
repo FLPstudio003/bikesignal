@@ -18,25 +18,35 @@ export async function GET() {
     }
   )
 
-  const {
-    data: { user }
-  } = await supabase.auth.getUser()
+  const { data: { user } } = await supabase.auth.getUser()
+
+  const baseUrl =
+    process.env.NODE_ENV === "production"
+      ? "https://bikesignal.vercel.app"
+      : "http://localhost:3000"
 
   if (!user) {
-    return NextResponse.redirect("http://localhost:3000/login")
+    return NextResponse.redirect(`${baseUrl}/login`)
   }
 
   const client_id = process.env.STRAVA_CLIENT_ID
-  const redirect_uri = process.env.STRAVA_REDIRECT_URI
+  const redirect_uri =
+    process.env.NODE_ENV === "production"
+      ? "https://bikesignal.vercel.app/api/strava/callback"
+      : "http://localhost:3000/api/strava/callback"
 
-  const url =
-    "https://www.strava.com/oauth/authorize" +
+  if (!client_id) {
+    return new NextResponse("Missing STRAVA_CLIENT_ID", { status: 500 })
+  }
+
+  const stravaUrl =
+    `https://www.strava.com/oauth/authorize` +
     `?client_id=${client_id}` +
-    "&response_type=code" +
+    `&response_type=code` +
     `&redirect_uri=${redirect_uri}` +
-    "&approval_prompt=auto" +
-    "&scope=read,activity:read" +
+    `&approval_prompt=auto` +
+    `&scope=read,activity:read_all` +
     `&state=${user.id}`
 
-  return NextResponse.redirect(url)
+  return NextResponse.redirect(stravaUrl)
 }

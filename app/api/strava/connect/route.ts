@@ -11,13 +11,14 @@ export async function GET() {
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
-        getAll() {
-          return cookieStore.getAll()
+        get(name: string) {
+          return cookieStore.get(name)?.value
         },
-        setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value, options }) =>
-            cookieStore.set(name, value, options)
-          )
+        set(name: string, value: string, options: any) {
+          cookieStore.set(name, value, options)
+        },
+        remove(name: string, options: any) {
+          cookieStore.set(name, "", options)
         }
       }
     }
@@ -31,16 +32,13 @@ export async function GET() {
     )
   }
 
-  const client_id = process.env.STRAVA_CLIENT_ID
-  const redirect_uri = process.env.STRAVA_REDIRECT_URI
-
   const url =
-    "https://www.strava.com/oauth/authorize" +
-    `?client_id=${client_id}` +
-    "&response_type=code" +
-    `&redirect_uri=${redirect_uri}` +
-    "&approval_prompt=auto" +
-    "&scope=read,activity:read_all"
+    `https://www.strava.com/oauth/authorize` +
+    `?client_id=${process.env.STRAVA_CLIENT_ID}` +
+    `&response_type=code` +
+    `&redirect_uri=${process.env.STRAVA_REDIRECT_URI}` +
+    `&approval_prompt=auto` +
+    `&scope=read,activity:read_all`
 
   return NextResponse.redirect(url)
 }

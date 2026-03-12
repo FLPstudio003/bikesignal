@@ -1,37 +1,22 @@
 import { NextResponse } from "next/server"
-import { createServerClient } from "@supabase/ssr"
-import { cookies } from "next/headers"
 
-export async function GET() {
+export async function GET(req: Request) {
 
-  const cookieStore = await cookies()
+  const url = new URL(req.url)
+  const user_id = url.searchParams.get("user")
 
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get(name: string) {
-          return cookieStore.get(name)?.value
-        },
-      },
-    }
-  )
-
-  const { data: { user } } = await supabase.auth.getUser()
-
-  if (!user) {
-    return NextResponse.redirect("https://bikesignal.vercel.app/login")
+  if (!user_id) {
+    return NextResponse.redirect("https://bikesignal.vercel.app/dashboard")
   }
 
-  const url =
+  const stravaUrl =
     `https://www.strava.com/oauth/authorize` +
     `?client_id=${process.env.STRAVA_CLIENT_ID}` +
     `&response_type=code` +
     `&redirect_uri=${process.env.STRAVA_REDIRECT_URI}` +
     `&approval_prompt=auto` +
     `&scope=read,activity:read_all` +
-    `&state=${user.id}`
+    `&state=${user_id}`
 
-  return NextResponse.redirect(url)
+  return NextResponse.redirect(stravaUrl)
 }

@@ -297,7 +297,7 @@ export default function DashboardPage(){
 
         ):(
           <a
-            href="/api/strava/connect"
+            href={`/api/strava/connect?user=${profile.id}`}
             className="bg-orange-500 hover:bg-orange-600 px-5 py-2.5 rounded-lg flex items-center gap-2 text-sm font-medium"
           >
             <Link2 size={16}/>
